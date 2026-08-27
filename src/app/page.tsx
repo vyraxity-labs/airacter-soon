@@ -6,7 +6,6 @@ import ThreeOrbit from './_components/three-orbit'
 import Countdown3D from './_components/countdown-3d'
 import ChatPreview from './_components/chat-preview'
 import Features from './_components/features'
-import clsx from 'clsx'
 
 export default function Page() {
   const activeTheme = useStore((state) => state.theme)
@@ -71,8 +70,8 @@ export default function Page() {
           <ThemeSwitcher />
         </div>
 
-        <div className='mt-12 w-full max-w-2xl flex justify-center'>
-          <ChatPreview />
+        <div className="mt-12 w-full max-w-2xl flex justify-center">
+          <ChatPreview key={activeTheme} />
         </div>
       </section>
 

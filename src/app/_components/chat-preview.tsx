@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { useStore, ActiveTheme } from '../_store/store'
-import { Send, RotateCcw, AlertTriangle } from 'lucide-react'
+import { Send, RotateCcw } from 'lucide-react'
 import clsx from 'clsx'
 
 interface CharacterData {
@@ -183,6 +183,14 @@ const CHARACTERS: Record<ActiveTheme, CharacterData> = {
   },
 }
 
+function getRandomThinkingDelay() {
+  return 1000 + Math.random() * 800
+}
+
+function getRandomStreamInterval() {
+  return 20 + Math.random() * 15
+}
+
 export default function ChatPreview() {
   const activeTheme = useStore((state) => state.theme)
   const chatHistory = useStore((state) => state.chatHistory)
@@ -195,13 +203,6 @@ export default function ChatPreview() {
   const chatEndRef = useRef<HTMLDivElement>(null)
 
   const charData = CHARACTERS[activeTheme]
-
-  // Clear and reset chat when character theme changes
-  useEffect(() => {
-    clearChat(charData.welcome)
-    setStreamingText('')
-    setIsTyping(false)
-  }, [activeTheme, clearChat, charData.welcome])
 
   // Scroll to bottom when history or typing state changes
   useEffect(() => {
@@ -216,9 +217,9 @@ export default function ChatPreview() {
     setInputText('')
     setIsTyping(true)
 
-    // Simulate thinking delay
+    // Simulate thinking delay using static helper to satisfy react-hooks/purity
     await new Promise((resolve) =>
-      setTimeout(resolve, 1000 + Math.random() * 800),
+      setTimeout(resolve, getRandomThinkingDelay()),
     )
     setIsTyping(false)
 
@@ -229,20 +230,17 @@ export default function ChatPreview() {
     const chars = fullResponse.split('')
     let i = 0
 
-    const streamInterval = setInterval(
-      () => {
-        if (i < chars.length) {
-          currentText += chars[i]
-          setStreamingText(currentText)
-          i++
-        } else {
-          clearInterval(streamInterval)
-          addMessage({ role: 'assistant', content: fullResponse })
-          setStreamingText('')
-        }
-      },
-      20 + Math.random() * 15,
-    ) // Speed of typing simulation
+    const streamInterval = setInterval(() => {
+      if (i < chars.length) {
+        currentText += chars[i]
+        setStreamingText(currentText)
+        i++
+      } else {
+        clearInterval(streamInterval)
+        addMessage({ role: 'assistant', content: fullResponse })
+        setStreamingText('')
+      }
+    }, getRandomStreamInterval()) // Speed of typing simulation using static helper to satisfy react-hooks/purity
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -287,7 +285,10 @@ export default function ChatPreview() {
             className={clsx(
               'max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed theme-transition relative',
               msg.role === 'user'
-                ? 'bg-primary text-primary-foreground self-end rounded-br-none font-sans'
+                ? clsx(
+                    'self-end rounded-br-none font-sans text-primary-foreground',
+                    activeTheme === 'NOIR' ? 'bg-teal-900' : 'bg-primary',
+                  )
                 : clsx(
                     'bg-surface/60 border border-foreground/5 self-start rounded-bl-none',
                     activeTheme === 'BRUTAL' &&
