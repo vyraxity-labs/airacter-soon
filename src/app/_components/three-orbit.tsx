@@ -161,7 +161,6 @@ export default function ThreeOrbit() {
       animationFrameId = requestAnimationFrame(animate)
 
       const time = clock.getElapsedTime()
-      const delta = clock.getDelta()
 
       const target = targetConfig.current
 

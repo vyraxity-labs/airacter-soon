@@ -15,9 +15,16 @@ interface AppState {
   clearChat: (initialMessage?: string) => void
 }
 
+const WELCOME_MESSAGES: Record<ActiveTheme, string> = {
+  BRUTAL: "Welcome to Code Jail. Paste your code and let's see how much of a crime scene it is today.",
+  STOIC: "Greetings, traveller. Let us sit and examine what is troubling your mind. Remember, we suffer more often in imagination than in reality.",
+  NOIR: "The rain was hitting the glass pane like a cheap typewriter. I was pouring myself a lukewarm coffee when you walked in. What's your case, kid?",
+  STREET: "Ah! My friend! Enter! The Suya is hot, the onions are plenty. Tell me, wetin dey play? Life problem? Make we discuss am over food!",
+}
+
 export const useStore = create<AppState>((set) => ({
   theme: 'BRUTAL', // Default theme (starts code review style)
-  chatHistory: [],
+  chatHistory: [{ role: 'assistant', content: WELCOME_MESSAGES.BRUTAL }],
   setTheme: (theme) =>
     set(() => {
       if (typeof window !== 'undefined') {
@@ -37,14 +44,19 @@ export const useStore = create<AppState>((set) => ({
         }
         document.documentElement.classList.add(classMap[theme])
       }
-      return { theme }
+      return { 
+        theme,
+        chatHistory: [{ role: 'assistant', content: WELCOME_MESSAGES[theme] }]
+      }
     }),
   addMessage: (message) =>
     set((state) => ({
       chatHistory: [...state.chatHistory, message],
     })),
   clearChat: (initialMessage) =>
-    set(() => ({
-      chatHistory: initialMessage ? [{ role: 'assistant', content: initialMessage }] : [],
+    set((state) => ({
+      chatHistory: initialMessage 
+        ? [{ role: 'assistant', content: initialMessage }] 
+        : [{ role: 'assistant', content: WELCOME_MESSAGES[state.theme] }],
     })),
 }))
