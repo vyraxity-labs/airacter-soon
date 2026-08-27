@@ -2,6 +2,7 @@
 
 import { useStore } from './_store/store'
 import ThemeSwitcher from './_components/theme-switcher'
+import ThreeOrbit from './_components/three-orbit'
 import clsx from 'clsx'
 
 export default function Page() {
@@ -22,7 +23,8 @@ export default function Page() {
   }
 
   return (
-    <main className='flex flex-col items-center justify-between min-h-screen px-6 py-12 md:py-24 max-w-7xl mx-auto z-10 w-full'>
+    <main className='flex flex-col items-center justify-between min-h-screen px-6 py-12 md:py-24 max-w-7xl mx-auto z-10 w-full relative'>
+      <ThreeOrbit />
       {/* Header */}
       <header className='flex justify-between items-center w-full mb-12'>
         <div className='flex items-center gap-2'>
