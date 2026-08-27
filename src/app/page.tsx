@@ -5,6 +5,8 @@ import ThemeSwitcher from './_components/theme-switcher'
 import ThreeOrbit from './_components/three-orbit'
 import Countdown3D from './_components/countdown-3d'
 import ChatPreview from './_components/chat-preview'
+import Features from './_components/features'
+import clsx from 'clsx'
 
 export default function Page() {
   const activeTheme = useStore((state) => state.theme)
@@ -73,6 +75,9 @@ export default function Page() {
           <ChatPreview />
         </div>
       </section>
+
+      {/* Features Grid */}
+      <Features />
 
       {/* Footer */}
       <footer className='w-full text-center mt-12 text-xs opacity-50 flex flex-col sm:flex-row justify-between items-center gap-4'>
