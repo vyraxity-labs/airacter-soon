@@ -4,6 +4,7 @@ import { useStore } from './_store/store'
 import ThemeSwitcher from './_components/theme-switcher'
 import ThreeOrbit from './_components/three-orbit'
 import Countdown3D from './_components/countdown-3d'
+import ChatPreview from './_components/chat-preview'
 
 export default function Page() {
   const activeTheme = useStore((state) => state.theme)
@@ -66,6 +67,10 @@ export default function Page() {
         <div className='mt-16 w-full max-w-lg p-6 rounded-2xl glass-card relative overflow-hidden'>
           <div className='absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none' />
           <ThemeSwitcher />
+        </div>
+
+        <div className='mt-12 w-full max-w-2xl flex justify-center'>
+          <ChatPreview />
         </div>
       </section>
 
