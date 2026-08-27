@@ -3,7 +3,7 @@
 import { useStore } from './_store/store'
 import ThemeSwitcher from './_components/theme-switcher'
 import ThreeOrbit from './_components/three-orbit'
-import clsx from 'clsx'
+import Countdown3D from './_components/countdown-3d'
 
 export default function Page() {
   const activeTheme = useStore((state) => state.theme)
@@ -41,7 +41,7 @@ export default function Page() {
       </header>
 
       {/* Hero Section */}
-      <section className='flex flex-col items-center justify-center flex-1 max-w-3xl text-center my-12'>
+      <section className='flex flex-col items-center justify-center flex-1 max-w-3xl text-center my-12 w-full'>
         <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 border border-primary/25 text-primary mb-6 animate-pulse'>
           ⚡ System Engine Online
         </div>
@@ -57,6 +57,11 @@ export default function Page() {
         <p className='text-lg md:text-2xl opacity-80 min-h-15 font-medium leading-relaxed max-w-2xl px-4 transition-all duration-300'>
           &ldquo;{getHeroText()}&rdquo;
         </p>
+
+        {/* 3D Countdown component container */}
+        <div className='mt-12 w-full max-w-xl flex justify-center'>
+          <Countdown3D />
+        </div>
 
         <div className='mt-16 w-full max-w-lg p-6 rounded-2xl glass-card relative overflow-hidden'>
           <div className='absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl pointer-events-none' />
