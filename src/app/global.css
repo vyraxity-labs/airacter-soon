@@ -1,18 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Plus+Jakarta+Sans:wght@400;600;800&family=Share+Tech+Mono&family=Special+Elite&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: var(--font-family-sans);
+  --font-mono: var(--font-family-mono);
+  
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  
+  --shadow-glow: var(--glow-shadow);
 }
 
 :root {
-  --background: #0b1326;
-  --foreground: #dae2fd;
-  --primary: #89ceff;
-  --secondary: #d2bbff;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Default / BRUTAL theme (Terminal) */
+:root, .theme-brutal {
+  --primary: #38bdf8;
+  --secondary: #22c55e;
+  --accent: #f59e0b;
+  --background: #050811;
+  --foreground: #e0e7ff;
+  --surface: #0f172a;
+  --font-family-sans: "Share Tech Mono", monospace;
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --glow-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+}
+
+/* STOIC theme (Marble/Sage) */
+.theme-stoic {
+  --primary: #5c6f68;
+  --secondary: #8c8275;
+  --accent: #bda38f;
+  --background: #f4f3f0;
+  --foreground: #2d3732;
+  --surface: #eae8e1;
+  --font-family-sans: "Cinzel", Georgia, serif;
+  --font-family-mono: Georgia, serif;
+  --glow-shadow: 0 4px 20px rgba(92, 111, 104, 0.15);
+}
+
+/* NOIR theme (Monochrome/Typewriter) */
+.theme-noir {
+  --primary: #e5e5e5;
+  --secondary: #404040;
+  --accent: #737373;
+  --background: #121212;
+  --foreground: #f5f5f5;
+  --surface: #1e1e1e;
+  --font-family-sans: "Special Elite", "Courier New", Courier, monospace;
+  --font-family-mono: "Courier New", Courier, monospace;
+  --glow-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+/* STREET theme (Lagos/Warm Tropical) */
+.theme-street {
+  --primary: #eab308;
+  --secondary: #ea580c;
+  --accent: #16a34a;
+  --background: #110e2e;
+  --foreground: #fef08a;
+  --surface: #201b5a;
+  --font-family-sans: "Plus Jakarta Sans", sans-serif;
+  --font-family-mono: ui-monospace, monospace;
+  --glow-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
+  overflow-x: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease, font-family 0.5s ease;
+}
+
+/* Base resets & utilities */
+.theme-transition {
+  transition: all 0.5s ease;
+}
+
+/* Custom background overlays */
+.overlay-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Brutal Theme: CRT Scanlines & Terminal Glow */
+.theme-brutal .overlay-container::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  z-index: 2;
+  background-size: 100% 4px, 6px 100%;
+}
+
+/* Noir Theme: Subtle animated film grain */
+@keyframes noise-anim {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-1%, -1%); }
+  20% { transform: translate(-2%, 1%); }
+  30% { transform: translate(1%, -2%); }
+  40% { transform: translate(-1%, 3%); }
+  50% { transform: translate(-2%, 1%); }
+  60% { transform: translate(1%, 2%); }
+  70% { transform: translate(-1%, -1%); }
+  80% { transform: translate(-2%, 1%); }
+  90% { transform: translate(1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+.theme-noir .overlay-container::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200%;
+  background: transparent url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.08"/%3E%3C/svg%3E') repeat;
+  opacity: 0.15;
+  animation: noise-anim 0.5s steps(8) infinite;
+  z-index: 1;
+}
+
+/* Stoic Theme: Minimal grid lines representing clean slate */
+.theme-stoic .overlay-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(92, 111, 104, 0.05) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(92, 111, 104, 0.05) 1px, transparent 1px);
+  z-index: 1;
+}
+
+/* Glassmorphism style cards */
+.glass-card {
+  background: rgba(var(--surface-rgb, 15, 23, 42), 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.theme-stoic .glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(92, 111, 104, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+}
+
+.theme-noir .glass-card {
+  background: rgba(30, 30, 30, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.theme-street .glass-card {
+  background: rgba(32, 27, 90, 0.6);
+  border: 1px solid rgba(234, 88, 12, 0.2);
+}
+
+/* Blinking cursor for Terminal (Brutal) and Typewriter (Noir) */
+.blinking-cursor::after {
+  content: "█";
+  margin-left: 4px;
+  animation: blink 1s step-end infinite;
+}
+
+.theme-noir .blinking-cursor::after {
+  content: "_";
+}
+
+@keyframes blink {
+  from, to { color: transparent; }
+  50% { color: var(--primary); }
 }
